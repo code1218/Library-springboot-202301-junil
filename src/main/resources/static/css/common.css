@@ -10,6 +10,19 @@
     font-size: 14px;
 }
 
+body {
+    background-image: url(/static/images/main_background.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+#container {
+    margin: 0px auto;
+    width: 1400px;
+}
+
 input, select, textarea, table, th, td {
     border: 1px solid #dbdbdb;
     border-radius: 4px;
