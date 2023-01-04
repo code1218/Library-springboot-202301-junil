@@ -10,6 +10,15 @@
     font-size: 14px;
 }
 
+*::-webkit-scrollbar {
+    width: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #3e3e3e;
+    border-radius: 5px;
+}
+
 body {
     background-image: url(/static/images/main_background.jpg);
     background-repeat: no-repeat;
