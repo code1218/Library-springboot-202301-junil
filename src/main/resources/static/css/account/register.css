@@ -54,3 +54,19 @@
     font-size: 11px;
     color: red;
 }
+
+.condition-text {
+    width: 100%;
+    height: 100%;
+
+    font-size: 12px;
+
+    resize: none;
+    overflow-y: auto;
+}
+
+.register-submit {
+    padding: 10px;
+
+    font-weight: 600;
+}
