@@ -42,7 +42,7 @@ class RegisterService {
 
     setErrorMessage(errors) {
         const registerError = document.querySelectorAll(".register-error");
-        
+
         this.#clearErrorMessage();
 
         Object.keys(errors).forEach(error => {

@@ -19,6 +19,7 @@ public class AccountApi {
     @ValidAspect
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid UserDto userDto, BindingResult bindingResult) {
+
         return ResponseEntity
                 .created(null)
                 .body(new CMRespDto<>("Create a new User", null));
