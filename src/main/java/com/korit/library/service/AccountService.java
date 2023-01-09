@@ -17,12 +17,20 @@ public class AccountService {
     @Autowired
     private AccountRepository accountRepository;
 
+    public UserDto registerUser(UserDto userDto) {
+        accountRepository.saveUser(userDto);
+        accountRepository.saveRole(userDto);
+        return userDto;
+    }
+
     public void duplicateUsername(String username) {
         UserDto user = accountRepository.findUserByUsername(username);
-        log.info("{}", user);
-        log.info("ROLE_DTL{}", user.getRoleDtlDto());
-        log.info("ROLE_MST{}", user.getRoleDtlDto().get(0));
-        log.info("ROLE_MST{}", user.getRoleDtlDto().get(1));
+        if(user != null) {
+            Map<String, String> errorMap = new HashMap<>();
+            errorMap.put("username", "이미 존재하는 사용자이름입니다.");
+
+            throw new CustomValidationException(errorMap);
+        }
     }
 
     public void compareToPassword(String password, String repassword) {
@@ -32,6 +40,10 @@ public class AccountService {
 
             throw new CustomValidationException(errorMap);
         }
+    }
+
+    public UserDto getUser(int userId) {
+        return accountRepository.findUserByUserId(userId);
     }
 
 }

@@ -29,8 +29,8 @@ public class UserDto {
     @Email
     private String email;
 
-    private List<RoleDtlDto> roleDtlDto;
-
     private LocalDateTime createDate;
     private LocalDateTime updateDate;
+
+    private List<RoleDtlDto> roleDtlDto;
 }
