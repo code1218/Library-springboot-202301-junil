@@ -19,9 +19,9 @@
             1 = 1
         <if test="searchValue != null">
         and (
-                book_name like CONCAT('%', #{searchValue} , '%')
-            or	author like CONCAT('%', #{searchValue} , '%')
-            or	publisher like CONCAT('%', #{searchValue} , '%')
+                book_name like CONCAT('%', #{searchValue}, '%')
+            or	author like CONCAT('%', #{searchValue}, '%')
+            or	publisher like CONCAT('%', #{searchValue}, '%')
             )
         </if>
         <if test="category != null">

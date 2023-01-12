@@ -15,6 +15,7 @@ public class BookService {
     private BookRepository bookRepository;
 
     public List<BookMstDto> searchBook(SearchReqDto searchReqDto) {
+        searchReqDto.setIndex();
         return bookRepository.searchBook(searchReqDto);
     }
 }
