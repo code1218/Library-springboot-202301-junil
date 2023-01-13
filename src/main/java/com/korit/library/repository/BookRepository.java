@@ -32,6 +32,8 @@ public interface BookRepository {
     public List<CategoryDto> findAllCategory();
 
     public int saveBook(BookReqDto bookReqDto);
+
+    public int updateBookByBookCode(BookReqDto bookReqDto);
 }
 
 

@@ -69,4 +69,28 @@
         values
             (0, #{bookCode}, #{bookName}, #{author}, #{publisher}, #{publicationDate}, #{category})
     </insert>
+
+    <update id="updateBookByBookCode" parameterType="com.korit.library.web.dto.BookReqDto">
+        update book_mst
+        set
+            book_name = #{bookName},
+            author = if(#{author} = '', null, #{author}),
+            publisher = if(#{publisher} = '', null, #{publisher}),
+            publication_date = if(#{publicationDate} = '', null, #{publicationDate}),
+            category = #{category}
+        where
+            book_code = #{bookCode}
+    </update>
+
+    <update id="maintainUpdateBookByBookCode" parameterType="com.korit.library.web.dto.BookReqDto">
+        update book_mst
+        set
+            book_name = #{bookName},
+            <if test='author != null'>author = if(#{author} = '', null, #{author}),</if>
+            <if test='publisher != null'>publisher = if(#{publisher} = '', null, #{publisher}),</if>
+            <if test='publicationDate != null'>publication_date = if(#{publicationDate} = '', null, #{publicationDate}),</if>
+            category = #{category}
+        where
+            book_code = #{bookCode}
+    </update>
 </mapper>

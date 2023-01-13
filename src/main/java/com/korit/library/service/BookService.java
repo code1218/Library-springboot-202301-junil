@@ -42,6 +42,10 @@ public class BookService {
             throw new CustomValidationException(errorMap);
         }
     }
+
+    public void modifyBook(BookReqDto bookReqDto) {
+        bookRepository.updateBookByBookCode(bookReqDto);
+    }
 }
 
 

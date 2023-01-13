@@ -48,6 +48,18 @@ public class BookApi {
                 .body(new CMRespDto<>(HttpStatus.CREATED.value(), "Successfully", true));
     }
 
+    @ParamsAspect
+    @ValidAspect
+    @PutMapping("/book/{bookCode}")
+    public ResponseEntity<CMRespDto<?>> modifyBook(@PathVariable String bookCode, @Valid @RequestBody BookReqDto bookReqDto, BindingResult bindingResult) {
+        bookService.modifyBook(bookReqDto);
+        return ResponseEntity
+                .ok()
+                .body(new CMRespDto<>(HttpStatus.OK.value(), "Successfully", true));
+    }
+
+
+
 }
 
 
