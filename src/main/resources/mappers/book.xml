@@ -39,6 +39,34 @@
         <if test='limit == "Y"'>
             limit #{index}, #{count}
         </if>
-
     </select>
+
+    <select id="findBookByBookCode" resultType="com.korit.library.web.dto.BookMstDto">
+        SELECT
+            book_id as bookId,
+            book_code as bookCode,
+            book_name as bookName,
+            author,
+            publisher,
+            publication_date as publicationDate,
+            category
+        from
+            book_mst
+        where
+            book_code = #{bookCode};
+    </select>
+
+    <select id="findAllCategory" resultType="com.korit.library.web.dto.CategoryDto">
+        select
+            category_id,
+            category
+        from
+            category_view
+    </select>
+
+    <insert id="saveBook" parameterType="com.korit.library.web.dto.BookReqDto">
+        insert into book_mst
+        values
+            (0, #{bookCode}, #{bookName}, #{author}, #{publisher}, #{publicationDate}, #{category})
+    </insert>
 </mapper>
