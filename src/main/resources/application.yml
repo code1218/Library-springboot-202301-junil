@@ -15,3 +15,8 @@ spring:
 mybatis:
   mapper-locations:
     - /mappers/*.xml
+
+jwt:
+  header: Authorization
+  secret: Zaq1Xsw2Cde3Vfr4Bgt5Nhy6Mju7Ki8Lo9P0Zaq1Xsw2Cde3Vfr4Bgt5Nhy6Mju7Ki8Lo9P0Zaq1Xsw2Cde3Vfr4Bgt5Nhy6Mju7Ki8Lo9P0Zaq1Xsw2Cde3Vfr4Bgt5Nhy6Mju7Ki8Lo9P0
+  token-validity-in-seconds: 86400

@@ -46,6 +46,10 @@ public class BookService {
     public void modifyBook(BookReqDto bookReqDto) {
         bookRepository.updateBookByBookCode(bookReqDto);
     }
+
+    public void maintainModifyBook(BookReqDto bookReqDto) {
+        bookRepository.maintainUpdateBookByBookCode(bookReqDto);
+    }
 }
 
 

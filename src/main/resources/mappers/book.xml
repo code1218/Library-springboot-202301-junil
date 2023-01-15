@@ -74,9 +74,9 @@
         update book_mst
         set
             book_name = #{bookName},
-            author = if(#{author} = '', null, #{author}),
-            publisher = if(#{publisher} = '', null, #{publisher}),
-            publication_date = if(#{publicationDate} = '', null, #{publicationDate}),
+            author = #{author},
+            publisher = #{publisher},
+            publication_date = #{publicationDate},
             category = #{category}
         where
             book_code = #{bookCode}
