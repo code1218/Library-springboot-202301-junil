@@ -5,6 +5,9 @@ import com.korit.library.aop.annotation.ValidAspect;
 import com.korit.library.service.BookService;
 import com.korit.library.web.dto.*;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -82,9 +85,7 @@ public class BookApi {
     @ParamsAspect
     @PostMapping("/book/{bookCode}/images")
     public ResponseEntity<CMRespDto<?>> registerBookImg(@PathVariable String bookCode, @RequestPart List<MultipartFile> files) {
-        MultipartFile file = files.get(0);
-        System.out.println(file.getOriginalFilename());
-
+        bookService.registerBookImages(bookCode, files);
         return ResponseEntity.ok()
                 .body(new CMRespDto<>(HttpStatus.OK.value(), "Successfully", true));
     }
