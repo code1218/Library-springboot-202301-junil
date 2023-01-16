@@ -86,9 +86,9 @@
         update book_mst
         set
             book_name = #{bookName},
-            <if test='author != null'>author = if(#{author} = '', null, #{author}),</if>
-            <if test='publisher != null'>publisher = if(#{publisher} = '', null, #{publisher}),</if>
-            <if test='publicationDate != null'>publication_date = if(#{publicationDate} = '', null, #{publicationDate}),</if>
+            <if test='author != null and author != ""'>author = #{author},</if>
+            <if test='publisher != null and publisher != ""'>publisher = #{publisher},</if>
+            <if test='publicationDate != null'>publication_date = #{publicationDate},</if>
             category = #{category}
         where
             book_code = #{bookCode}
