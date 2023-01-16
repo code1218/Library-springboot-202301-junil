@@ -93,4 +93,12 @@
         where
             book_code = #{bookCode}
     </update>
+
+    <delete id="deleteBook">
+        delete
+        from
+            book_mst
+        where
+            book_code = #{bookCode}
+    </delete>
 </mapper>

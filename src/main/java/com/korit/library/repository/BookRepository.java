@@ -34,6 +34,9 @@ public interface BookRepository {
     public int saveBook(BookReqDto bookReqDto);
 
     public int updateBookByBookCode(BookReqDto bookReqDto);
+    public int maintainUpdateBookByBookCode(BookReqDto bookReqDto);
+
+    public int deleteBook(String bookCode);
 }
 
 
