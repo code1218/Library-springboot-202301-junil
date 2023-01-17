@@ -99,7 +99,14 @@ public class BookService {
         });
 
         bookRepository.registerBookImages(bookImageDtos);
+    }
 
+    public List<BookImageDto> getBooks(String bookCode) {
+        return bookRepository.findBookImageAll(bookCode);
+    }
+
+    public void removeBookImage(int imageId) {
+        bookRepository.deleteBookImage(imageId);
     }
 }
 
