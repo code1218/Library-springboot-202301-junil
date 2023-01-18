@@ -16,11 +16,21 @@
         and	rd.return_date is null
     </select>
 
-    <insert id="saveRentalMst">
-
+    <insert id="saveRentalMst"
+            parameterType="com.korit.library.entity.RentalMst"
+            useGeneratedKeys="true"
+            keyProperty="rentalId">
+        insert into rental_mst
+        values
+            (0, #{userId}, now(), date_add(now(), INTERVAL 14 DAY))
     </insert>
-    <insert id="saveRentalDtl">
 
+    <insert id="saveRentalDtl" parameterType="list">
+        insert into rental_dtl
+        values
+        <foreach collection="list" item="rental" separator=",">
+            (0, #{rental.rentalId}, #{rental.bookId}, null)
+        </foreach>
     </insert>
 
 </mapper>

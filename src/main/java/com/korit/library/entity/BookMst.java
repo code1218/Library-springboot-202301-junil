@@ -1,4 +1,4 @@
-package com.korit.library.web.dto;
+package com.korit.library.entity;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -7,14 +7,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class BookMstDto {
+public class BookMst {
 
     @ApiModelProperty(hidden = true)
     private int bookId;
