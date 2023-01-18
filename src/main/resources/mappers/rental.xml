@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.korit.library.repository.RentalRepository">
+
+    <select id="rentalAvailability" resultType="Integer">
+        select
+            count(*) as rental_count
+        from
+            rental_mst rm
+            left outer join rental_dtl rd on(rd.rental_id = rm.rental_id)
+        where
+            rm.user_id = #{userId}
+        and	rd.return_date is null
+    </select>
+
+    <insert id="saveRentalMst">
+
+    </insert>
+    <insert id="saveRentalDtl">
+
+    </insert>
+
+</mapper>
