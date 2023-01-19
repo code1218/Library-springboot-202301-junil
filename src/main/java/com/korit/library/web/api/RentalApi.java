@@ -36,15 +36,13 @@ public class RentalApi {
     }
 
     @PutMapping("/rental/{bookId}")
-    public ResponseEntity<CMRespDto<?>> rentalReturn(@PathVariable int bookId,
-                                               @AuthenticationPrincipal PrincipalDetails principalDetails) {
-
-
-
+    public ResponseEntity<CMRespDto<?>> rentalReturn(@PathVariable int bookId) {
+        rentalService.returnBook(bookId);
         return ResponseEntity
                 .ok()
                 .body(new CMRespDto<>(HttpStatus.OK.value(), "Successfully", null));
     }
+
 }
 
 
