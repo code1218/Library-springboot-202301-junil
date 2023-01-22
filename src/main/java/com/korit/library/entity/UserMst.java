@@ -1,11 +1,10 @@
-package com.korit.library.web.dto;
+package com.korit.library.entity;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -16,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class UserDto {
+public class UserMst {
     @ApiModelProperty(hidden = true)
     private int userId;
 
@@ -47,5 +46,5 @@ public class UserDto {
     private LocalDateTime updateDate;
 
     @ApiModelProperty(hidden = true)
-    private List<RoleDtlDto> roleDtlDto;
+    private List<RoleDtl> roleDtl;
 }

@@ -20,3 +20,6 @@ jwt:
   header: Authorization
   secret: Zaq1Xsw2Cde3Vfr4Bgt5Nhy6Mju7Ki8Lo9P0Zaq1Xsw2Cde3Vfr4Bgt5Nhy6Mju7Ki8Lo9P0Zaq1Xsw2Cde3Vfr4Bgt5Nhy6Mju7Ki8Lo9P0Zaq1Xsw2Cde3Vfr4Bgt5Nhy6Mju7Ki8Lo9P0
   token-validity-in-seconds: 86400
+
+file:
+  path: C:/junil/web-3-202210/Library-springboot-202301-junil/upload/
