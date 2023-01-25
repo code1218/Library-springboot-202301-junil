@@ -1,14 +1,14 @@
 window.onload = () => {
-
+    BookService.getInstance().loadBookList();
 }
 
 let searchObj = {
-    page : 1,
+    page : 20,
     category : "",
     searchValue : "",
     order : "bookId",
     limit : "Y",
-    count : 20
+    count : 22
 }
 
 class BookSearchApi {
@@ -30,6 +30,7 @@ class BookSearchApi {
             data: searchObj,
             dataType: "json",
             success: response => {
+                console.log(response);
                 returnData = response.data;
             },
             error: error => {
@@ -52,7 +53,30 @@ class BookService {
     }
 
     loadBookList() {
+        const responseData = BookSearchApi.getInstance().getBookList(searchObj);
 
+        const bookListBody = document.querySelector(".content-table tbody");
+        bookListBody.innerHTML = "";
+
+        responseData.forEach((data, index) => {
+            bookListBody.innerHTML += `
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td>${data.bookId}</td>
+                    <td>${data.bookCode}</td>
+                    <td>${data.bookName}</td>
+                    <td>${data.author}</td>
+                    <td>${data.publisher}</td>
+                    <td>${data.publicationDate}</td>
+                    <td>${data.category}</td>
+                    <td>${data.rentalStatus == "Y" ? "대여중" : "대여가능"}</td>
+                    <td><i class="fa-solid fa-square-pen"></i></td>
+                    <td><i class="fa-solid fa-square-minus"></i></td>
+                </tr>
+            `;
+        });
     }
+
+
 }
 
