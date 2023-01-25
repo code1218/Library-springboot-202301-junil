@@ -1,16 +1,28 @@
 package com.korit.library.web.api;
 
+import com.korit.library.aop.annotation.ParamsAspect;
 import com.korit.library.aop.annotation.ValidAspect;
+import com.korit.library.security.jwt.JwtFilter;
+import com.korit.library.security.jwt.TokenProvider;
+import com.korit.library.web.dto.AuthDto;
 import com.korit.library.web.dto.CMRespDto;
 import com.korit.library.security.PrincipalDetails;
 import com.korit.library.service.AccountService;
 import com.korit.library.entity.UserMst;
+import com.korit.library.web.dto.TokenDto;
 import io.swagger.annotations.*;
+import io.swagger.models.Response;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.el.parser.Token;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +37,29 @@ public class AccountApi {
 
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private TokenProvider tokenProvider;
+    @Autowired
+    private AuthenticationManagerBuilder authenticationManagerBuilder;
+
+    @ParamsAspect
+    @PostMapping("/login")
+    public ResponseEntity<CMRespDto<?>> login(@RequestBody AuthDto authDto) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(authDto.getUsername(), authDto.getPassword());
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String jwt = tokenProvider.createToken(authentication);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+
+        return ResponseEntity.ok()
+                .headers(httpHeaders)
+                .body(new CMRespDto<>(HttpStatus.OK.value(), "Successfully", new TokenDto(jwt)));
+    }
+
 
     @ApiOperation(value = "회원가입", notes = "회원가입 요청 메소드")
     @ValidAspect

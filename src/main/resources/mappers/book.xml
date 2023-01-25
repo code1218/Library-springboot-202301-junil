@@ -12,13 +12,9 @@
             bm.author,
             bm.publisher,
             bm.publication_date as publicationDate,
-            bm.category,
-            bl.like_id,
-            bl.book_id,
-            bl.user_id
+            bm.category
         from
             book_mst bm
-            left outer join book_like bl on(bl.book_id = bm.book_id and bl.user_id = #{userId})
         where
             1 = 1
         <if test="searchValue != null">
