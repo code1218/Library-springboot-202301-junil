@@ -84,3 +84,9 @@
     background-color: #202020;
     color: white;
 }
+
+.page-controller .disabled {
+    background-color: #202020;
+    color: white;
+    cursor: default;
+}

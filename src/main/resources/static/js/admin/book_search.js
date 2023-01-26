@@ -5,7 +5,7 @@ window.onload = () => {
 }
 
 let searchObj = {
-    page : 1,
+    page : 5,
     category : "",
     searchValue : "",
     order : "bookId",
@@ -121,25 +121,54 @@ class BookService {
                 </tr>
             `;
         });
+
+        this.loadSearchNumberList();
     }
 
     loadSearchNumberList() {
-        const responseData = BookSearchApi.getInstance().getBookTotalCount();
-
         const pageController = document.querySelector(".page-controller");
-        pageController.innerHTML = "";
+
+        const totalCount = BookSearchApi.getInstance().getBookTotalCount(searchObj);
+        const maxPageNumber = totalCount % searchObj.count == 0 
+                            ? Math.floor(totalCount / searchObj.count) 
+                            : Math.floor(totalCount / searchObj.count) + 1;
 
         pageController.innerHTML = `
-            <a href="javascript:void(0)">이전</a>
+            <a href="javascript:void(0)" class="pre-button disabled">이전</a>
             <ul class="page-numbers">
-                <a href="javascript:void(0)"><li>1</li></a>
-                <a href="javascript:void(0)"><li>2</li></a>
-                <a href="javascript:void(0)"><li>3</li></a>
-                <a href="javascript:void(0)"><li>4</li></a>
-                <a href="javascript:void(0)"><li>5</li></a>
             </ul>
-            <a href="javascript:void(0)">다음</a>
+            <a href="javascript:void(0)" class="next-button disabled">다음</a>
         `;
+
+        if(searchObj.page != 1) {
+            const preButton = pageController.querySelector(".pre-button");
+            preButton.classList.remove("disabled");
+
+            preButton.onclick = () => {
+                searchObj.page--;
+                this.loadBookList();
+            }
+        }
+
+        if(searchObj.page != maxPageNumber) {
+            const nextButton = pageController.querySelector(".next-button");
+            nextButton.classList.remove("disabled");
+
+            nextButton.onclick = () => {
+                searchObj.page++;
+                this.loadBookList();
+            }
+        }
+
+        const startIndex = 1;
+        const endIndex = 5;
+        const pageNumbers = document.querySelector(".page-numbers");
+
+        for(let i = startIndex; i <= endIndex; i++) {
+            pageNumbers.innerHTML += `
+                <a href="javascript:void(0)"><li>${i}</li></a>
+            `;
+        }
     }
 
     loadCategories() {
