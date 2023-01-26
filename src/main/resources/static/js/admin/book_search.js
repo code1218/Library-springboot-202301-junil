@@ -117,7 +117,6 @@ class BookService {
                     <td>${data.category}</td>
                     <td>${data.rentalStatus == "Y" ? "대여중" : "대여가능"}</td>
                     <td><i class="fa-solid fa-square-pen"></i></td>
-                    <td><i class="fa-solid fa-square-minus"></i></td>
                 </tr>
             `;
         });
@@ -168,9 +167,21 @@ class BookService {
 
         for(let i = startIndex; i <= endIndex; i++) {
             pageNumbers.innerHTML += `
-                <a href="javascript:void(0)"class="page-number ${i == searchObj.page ? "disabled" : ""}"><li>${i}</li></a>
+                <a href="javascript:void(0)"class="page-button ${i == searchObj.page ? "disabled" : ""}"><li>${i}</li></a>
             `;
         }
+
+        const pageButtons = document.querySelectorAll(".page-button");
+        pageButtons.forEach(button => {
+
+            const pageNumber = button.textContent;
+            if(pageNumber != searchObj.page) {
+                button.onclick = () => {
+                    searchObj.page = pageNumber;
+                    this.loadBookList();
+                }
+            }
+        });
     }
 
     loadCategories() {
@@ -204,7 +215,7 @@ class ComponentEvent {
         searchButton.onclick = () => {
             searchObj.category = categorySelect.value;
             searchObj.searchValue = searchInput.value;
-            
+            searchObj.page = 1;
             BookService.getInstance().loadBookList();
         }
 
