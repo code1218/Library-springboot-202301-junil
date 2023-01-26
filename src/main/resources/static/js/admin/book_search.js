@@ -160,13 +160,15 @@ class BookService {
             }
         }
 
-        const startIndex = 1;
-        const endIndex = 5;
+        const startIndex = searchObj.page % 5 == 0 
+                        ? searchObj.page - 4 
+                        : searchObj.page - (searchObj.page % 5) + 1;
+        const endIndex = startIndex + 4 <= maxPageNumber ? startIndex + 4 : maxPageNumber;
         const pageNumbers = document.querySelector(".page-numbers");
 
         for(let i = startIndex; i <= endIndex; i++) {
             pageNumbers.innerHTML += `
-                <a href="javascript:void(0)"><li>${i}</li></a>
+                <a href="javascript:void(0)"class="page-number ${i == searchObj.page ? "disabled" : ""}"><li>${i}</li></a>
             `;
         }
     }
