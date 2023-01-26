@@ -43,6 +43,30 @@ class BookSearchApi {
         return returnData;
     }
 
+    getBookTotalCount(searchObj) {
+        let returnData = null;
+
+        $.ajax({
+            async: false,
+            type: "get",
+            url: "http://127.0.0.1:8000/api/admin/books/totalcount",
+            data: {
+                "category" : searchObj.category,
+                "searchValue" : searchObj.searchValue
+            },
+            dataType: "json",
+            success: response => {
+                console.log(response);
+                returnData = response.data;
+            },
+            error: error => {
+                console.log(error);
+            }
+        });
+
+        return returnData;
+    }
+
     getCategories() {
         let returnData = null;
 
@@ -97,6 +121,25 @@ class BookService {
                 </tr>
             `;
         });
+    }
+
+    loadSearchNumberList() {
+        const responseData = BookSearchApi.getInstance().getBookTotalCount();
+
+        const pageController = document.querySelector(".page-controller");
+        pageController.innerHTML = "";
+
+        pageController.innerHTML = `
+            <a href="javascript:void(0)">이전</a>
+            <ul class="page-numbers">
+                <a href="javascript:void(0)"><li>1</li></a>
+                <a href="javascript:void(0)"><li>2</li></a>
+                <a href="javascript:void(0)"><li>3</li></a>
+                <a href="javascript:void(0)"><li>4</li></a>
+                <a href="javascript:void(0)"><li>5</li></a>
+            </ul>
+            <a href="javascript:void(0)">다음</a>
+        `;
     }
 
     loadCategories() {
