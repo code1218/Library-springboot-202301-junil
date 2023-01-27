@@ -3,6 +3,7 @@ window.onload = () => {
     BookService.getInstance().loadCategories();
     ComponentEvent.getInstance().addClickEventSearchButton();
     ComponentEvent.getInstance().addClickEventDeleteButton();
+    ComponentEvent.getInstance().addClickEventDeleteCheckAll();
 }
 
 let searchObj = {
@@ -97,7 +98,9 @@ class BookSearchApi {
             url: "http://127.0.0.1:8000/api/admin/books",
             contentType: "application/json",
             data: JSON.stringify(
-                {userIds: deleteArray}
+                {
+                    userIds: deleteArray
+                }
             ),
             dataType: "json",
             success: response => {
@@ -124,6 +127,8 @@ class BookService {
 
     loadBookList() {
         const responseData = BookSearchApi.getInstance().getBookList(searchObj);
+        const checkAll = document.querySelector(".delete-checkall");
+        checkAll.checked = false;
 
         const bookListBody = document.querySelector(".content-table tbody");
         bookListBody.innerHTML = "";
@@ -146,6 +151,7 @@ class BookService {
         });
 
         this.loadSearchNumberList();
+        ComponentEvent.getInstance().addClickEventDeleteCheckbox();
     }
 
     loadSearchNumberList() {
@@ -265,6 +271,7 @@ class ComponentEvent {
                 const deleteArray = new Array();
     
                 const deleteCheckboxs = document.querySelectorAll(".delete-checkbox");
+
                 deleteCheckboxs.forEach((deleteCheckbox, index) => {
                     if(deleteCheckbox.checked) {
                         const bookIds = document.querySelectorAll(".book-id");
@@ -275,6 +282,33 @@ class ComponentEvent {
                 BookService.getInstance().removeBooks(deleteArray);
             }
         }
+    }
+
+    addClickEventDeleteCheckAll() {
+        const checkAll = document.querySelector(".delete-checkall");
+        checkAll.onclick = () => {
+            const deleteCheckboxs = document.querySelectorAll(".delete-checkbox");
+            deleteCheckboxs.forEach(deleteCheckbox => {
+                deleteCheckbox.checked = checkAll.checked;
+            });
+        }
+    }
+
+    addClickEventDeleteCheckbox() {
+        const deleteCheckboxs = document.querySelectorAll(".delete-checkbox");
+        const checkAll = document.querySelector(".delete-checkall");
+
+        deleteCheckboxs.forEach(deleteCheckbox => {
+            deleteCheckbox.onclick = () => {
+                const deleteCheckedCheckboxs = document.querySelectorAll(".delete-checkbox:checked");
+
+                if(deleteCheckedCheckboxs.length == deleteCheckboxs.length) {
+                    checkAll.checked = true;
+                }else {
+                    checkAll.checked = false;
+                }
+            }
+        });
     }
 }
 
