@@ -2,10 +2,11 @@ window.onload = () => {
     BookService.getInstance().loadBookList();
     BookService.getInstance().loadCategories();
     ComponentEvent.getInstance().addClickEventSearchButton();
+    ComponentEvent.getInstance().addClickEventDeleteButton();
 }
 
 let searchObj = {
-    page : 5,
+    page : 1,
     category : "",
     searchValue : "",
     order : "bookId",
@@ -87,6 +88,29 @@ class BookSearchApi {
         return returnData;
     }
 
+    deleteBooks(deleteArray) {
+        let returnFlag = false;
+
+        $.ajax({
+            async: false,
+            type: "delete",
+            url: "http://127.0.0.1:8000/api/admin/books",
+            contentType: "application/json",
+            data: JSON.stringify(
+                {userIds: deleteArray}
+            ),
+            dataType: "json",
+            success: response => {
+                returnFlag = true;
+            },
+            error: error => {
+                console.log(error);
+            }
+        })
+
+        return returnFlag;
+    }
+
 }
 
 class BookService {
@@ -107,8 +131,8 @@ class BookService {
         responseData.forEach((data, index) => {
             bookListBody.innerHTML += `
                 <tr>
-                    <td><input type="checkbox"></td>
-                    <td>${data.bookId}</td>
+                    <td><input type="checkbox" class="delete-checkbox"></td>
+                    <td class="book-id">${data.bookId}</td>
                     <td>${data.bookCode}</td>
                     <td>${data.bookName}</td>
                     <td>${data.author}</td>
@@ -196,6 +220,14 @@ class BookService {
             `;
         });
     }
+
+    removeBooks(deleteArray) {
+        let successFlag = BookSearchApi.getInstance().deleteBooks(deleteArray);
+        if(successFlag) {
+            searchObj.page = 1;
+            this.loadBookList();
+        }
+    }
 }
 
 class ComponentEvent {
@@ -222,6 +254,25 @@ class ComponentEvent {
         searchInput.onkeyup = () => {
             if(window.event.keyCode == 13) {
                 searchButton.click();
+            }
+        }
+    }
+
+    addClickEventDeleteButton() {
+        const deleteButton = document.querySelector(".delete-button");
+        deleteButton.onclick = () => {
+            if(confirm("정말로 삭제하시겠습니까?")) {
+                const deleteArray = new Array();
+    
+                const deleteCheckboxs = document.querySelectorAll(".delete-checkbox");
+                deleteCheckboxs.forEach((deleteCheckbox, index) => {
+                    if(deleteCheckbox.checked) {
+                        const bookIds = document.querySelectorAll(".book-id");
+                        deleteArray.push(bookIds[index].textContent);
+                    }
+                });
+    
+                BookService.getInstance().removeBooks(deleteArray);
             }
         }
     }
