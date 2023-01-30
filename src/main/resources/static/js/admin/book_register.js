@@ -1,4 +1,7 @@
 window.onload = () => {
+
+    ComponentEvent.getInstance().addClickEventRegisterButton();
+
     ComponentEvent.getInstance().addClickEventImgAddButton();
     ComponentEvent.getInstance().addChangeEventImgFile();
 }
@@ -38,6 +41,23 @@ class ComponentEvent {
             this.#instance = new ComponentEvent();
         }
         return this.#instance;
+    }
+
+    addClickEventRegisterButton() {
+        const registerButton = document.querySelector(".register-button");
+
+        registerButton.onclick = () => {
+            if(confirm("도서 이미지를 등록하시겠습니까?")) {
+                const imgAddButton = document.querySelector(".img-add-button");
+                const imgRegisterButton = document.querySelector(".img-register-button");
+    
+                imgAddButton.disabled = false;
+                imgRegisterButton.disabled = false;
+            }else {
+                location.reload();
+            }
+        }
+
     }
 
     addClickEventImgAddButton() {
