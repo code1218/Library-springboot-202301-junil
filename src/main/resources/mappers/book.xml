@@ -153,7 +153,7 @@
         insert into book_image
         values
             <foreach collection="list" item="file" separator=",">
-                (0, #{file.bookCode}, #{file.saveName}, #{file.originName}),
+                (0, #{file.bookCode}, #{file.saveName}, #{file.originName})
             </foreach>
     </insert>
 

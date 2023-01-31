@@ -18,7 +18,8 @@ const bookObj = {
 }
 
 const fileObj = {
-    files: new Array()
+    files: new Array(),
+    formData: new FormData()
 }
 
 class BookRegisterApi {
@@ -52,6 +53,27 @@ class BookRegisterApi {
         });
 
         return successFlag;
+    }
+
+    registerImg() {
+
+        $.ajax({
+            async: false,
+            type: "post",
+            url: `http://127.0.0.1:8000/api/admin/book/${bookObj.bookCode}/images`,
+            encType: "multipart/form-data",
+            contentType: false,
+            processData: false,
+            data: fileObj.formData,
+            dataType: "json",
+            success: response => {
+                alert("도서 이미지 등록 완료.");
+                location.reload();
+            },
+            error: error => {
+                console.log(error);
+            }
+        })
     }
 
     getCategories() {
@@ -231,7 +253,8 @@ class ComponentEvent {
         const imgRegisterButton = document.querySelector(".img-register-button");
 
         imgRegisterButton.onclick = () => {
-            
+            fileObj.formData.append("files", fileObj.files[0]);
+            BookRegisterApi.getInstance().registerImg();
         }
     }
 
