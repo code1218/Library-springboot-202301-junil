@@ -4,6 +4,8 @@ window.onload = () => {
     ComponentEvent.getInstance().addClickEventRegisterButton();
     ComponentEvent.getInstance().addClickEventImgAddButton();
     ComponentEvent.getInstance().addChangeEventImgFile();
+    ComponentEvent.getInstance().addClickEventImgRegisterButton();
+    ComponentEvent.getInstance().addClickEventImgCancelButton();
 }
 
 const bookObj = {
@@ -43,6 +45,8 @@ class BookRegisterApi {
             },
             error: error => {
                 console.log(error);
+                BookRegisterService.getInstance().setErrors(error.responseJSON.data);
+                
             }
 
         });
@@ -103,6 +107,28 @@ class BookRegisterService {
             `;
         });
     }
+
+    setErrors(errors) {
+        const errorMessages = document.querySelectorAll(".error-message");
+        this.clearErrors();
+
+        Object.keys(errors).forEach(key => {
+            if(key == "bookCode") {
+                errorMessages[0].innerHTML = errors[key];
+            }else if(key == "bookName") {
+                errorMessages[1].innerHTML = errors[key];
+            }else if(key == "category") {
+                errorMessages[5].innerHTML = errors[key];
+            }
+        })
+    }
+
+    clearErrors() {
+        const errorMessages = document.querySelectorAll(".error-message");
+        errorMessages.forEach(error => {
+            error.innerHTML = "";
+        })
+    }
 }
 
 
@@ -152,10 +178,10 @@ class ComponentEvent {
 
             if(confirm("도서 이미지를 등록하시겠습니까?")) {
                 const imgAddButton = document.querySelector(".img-add-button");
-                const imgRegisterButton = document.querySelector(".img-register-button");
+                const imgCancelButton = document.querySelector(".img-cancel-button");
     
                 imgAddButton.disabled = false;
-                imgRegisterButton.disabled = false;
+                imgCancelButton.disabled = false;
             }else {
                 location.reload();
             }
@@ -191,10 +217,31 @@ class ComponentEvent {
             });
 
             if(changeFlag) {
+                const imgRegisterButton = document.querySelector(".img-register-button");
+                imgRegisterButton.disabled = false;
+
                 ImgFileService.getInstance().getImgPreview();
                 imgFile.value = null;
             }
 
+        }
+    }
+
+    addClickEventImgRegisterButton() {
+        const imgRegisterButton = document.querySelector(".img-register-button");
+
+        imgRegisterButton.onclick = () => {
+            
+        }
+    }
+
+    addClickEventImgCancelButton() {
+        const imgCancelButton = document.querySelector(".img-cancel-button");
+
+        imgCancelButton.onclick = () => {
+            if(confirm("정말로 이미지 등록을 취소하시겠습니까?")) {
+                location.reload();
+            }
         }
     }
 }
