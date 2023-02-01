@@ -19,6 +19,13 @@ const bookObj = {
     category: ""
 }
 
+const imgObj = {
+    imageId: null,
+    bookCode: null,
+    saveName: null,
+    originName: null
+}
+
 const fileObj = {
     files: new Array(),
     formData: new FormData()
@@ -71,6 +78,68 @@ class BookModificationApi {
         return responseData;
     }
 
+    modifyBook() {
+        let successFlag = false;
+
+        $.ajax({
+            async: false,
+            type: "put",
+            url: `http://127.0.0.1:8000/api/admin/book/${bookObj.bookCode}`,
+            contentType: "application/json",
+            data: JSON.stringify(bookObj),
+            dataType: "json",
+            success: response => {
+                successFlag = true;
+            },
+            error: error => {
+                console.log(error);
+                BookModificationService.getInstance().setErrors(error.responseJSON.data);
+            }
+        });
+
+        return successFlag;
+    }
+
+    removeImg() {
+        let successFlag = false;
+
+        $.ajax({
+            async: false,
+            type: "delete",
+            url: `http://127.0.0.1:8000/api/admin/book/${bookObj.bookCode}/image/${imgObj.imageId}`,
+            dataType: "json",
+            success: response => {
+                successFlag = true;
+            },
+            error: error => {
+                console.log(error);
+            }
+        });
+
+        return successFlag;
+    }
+
+    registerImg() {
+
+        $.ajax({
+            async: false,
+            type: "post",
+            url: `http://127.0.0.1:8000/api/admin/book/${bookObj.bookCode}/images`,
+            encType: "multipart/form-data",
+            contentType: false,
+            processData: false,
+            data: fileObj.formData,
+            dataType: "json",
+            success: response => {
+                alert("도서 이미지 수정 완료.");
+                location.reload();
+            },
+            error: error => {
+                console.log(error);
+            }
+        })
+    }
+
 }
 
 class BookModificationService {
@@ -116,6 +185,11 @@ class BookModificationService {
         modificationInputs[5].value = responseData.bookMst.category;
 
         if(responseData.bookImage != null){
+            imgObj.imageId = responseData.bookImage.imageId;
+            imgObj.bookCode = responseData.bookImage.bookCode;
+            imgObj.saveName = responseData.bookImage.saveName;
+            imgObj.originName = responseData.bookImage.originName;
+
             const bookImg = document.querySelector(".book-img");
             bookImg.src = `http://127.0.0.1:8000/image/book/${responseData.bookImage.saveName}`;
         }
@@ -196,13 +270,15 @@ class ComponentEvent {
 
         modificationButton.onclick = () => {
             BookModificationService.getInstance().setBookObjValues();
-            const successFlag = BookModificationApi.getInstance().modificationBook();
+            const successFlag = BookModificationApi.getInstance().modifyBook();
             
             if(!successFlag) {
                 return;
             }
 
-            if(confirm("도서 이미지를 등록하시겠습니까?")) {
+            BookModificationService.getInstance().clearErrors();
+
+            if(confirm("도서 이미지를 수정하시겠습니까?")) {
                 const imgAddButton = document.querySelector(".img-add-button");
                 const imgCancelButton = document.querySelector(".img-cancel-button");
     
@@ -258,7 +334,17 @@ class ComponentEvent {
 
         imgModificationButton.onclick = () => {
             fileObj.formData.append("files", fileObj.files[0]);
-            BookModificationApi.getInstance().modificationImg();
+
+            let successFlag = true;
+
+            if(imgObj.imageId != null) {
+                successFlag = BookModificationApi.getInstance().removeImg();
+            }
+
+            if(successFlag) {
+                BookModificationApi.getInstance().registerImg();
+            }
+            
         }
     }
 
@@ -266,7 +352,7 @@ class ComponentEvent {
         const imgCancelButton = document.querySelector(".img-cancel-button");
 
         imgCancelButton.onclick = () => {
-            if(confirm("정말로 이미지 등록을 취소하시겠습니까?")) {
+            if(confirm("정말로 이미지 수정을 취소하시겠습니까?")) {
                 location.reload();
             }
         }
