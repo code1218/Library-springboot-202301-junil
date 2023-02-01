@@ -1,5 +1,7 @@
 window.onload = () => {
+    BookModificationService.getInstance().setBookCode();
     BookModificationService.getInstance().loadCategories();
+    BookModificationService.getInstance().loadBookAndImageData();
 
     ComponentEvent.getInstance().addClickEventModificationButton();
     ComponentEvent.getInstance().addClickEventImgAddButton();
@@ -29,6 +31,25 @@ class BookModificationApi {
             this.#instance = new BookModificationApi();
         }
         return this.#instance;
+    }
+
+    getBookAndImage() {
+        let responseData = null;
+
+        $.ajax({
+            async: false,
+            type: "get",
+            url: `http://127.0.0.1:8000/api/admin/book/${bookObj.bookCode}`,
+            dataType: "json",
+            success: response => {
+                responseData = response.data;
+            },
+            error: error => {
+                console.log(error);
+            }
+        });
+
+        return responseData;
     }
 
     getCategories() {
@@ -61,6 +82,11 @@ class BookModificationService {
         return this.#instance;
     }
 
+    setBookCode() {
+        const URLSearch = new URLSearchParams(location.search);
+        bookObj.bookCode = URLSearch.get("bookCode");
+    }
+
     setBookObjValues() {
         const modificationInputs = document.querySelectorAll(".modification-input");
 
@@ -70,6 +96,29 @@ class BookModificationService {
         bookObj.publisher = modificationInputs[3].value;
         bookObj.publicationDate = modificationInputs[4].value;
         bookObj.category = modificationInputs[5].value;
+    }
+
+    loadBookAndImageData() {
+        const responseData = BookModificationApi.getInstance().getBookAndImage();
+
+        if(responseData.bookMst == null) {
+            alert("해당 도서코드는 등록되지 않은 코드입니다.");
+            history.back();
+            return;
+        }
+
+        const modificationInputs = document.querySelectorAll(".modification-input");
+        modificationInputs[0].value = responseData.bookMst.bookCode;
+        modificationInputs[1].value = responseData.bookMst.bookName;
+        modificationInputs[2].value = responseData.bookMst.author;
+        modificationInputs[3].value = responseData.bookMst.publisher;
+        modificationInputs[4].value = responseData.bookMst.publicationDate;
+        modificationInputs[5].value = responseData.bookMst.category;
+
+        if(responseData.bookImage != null){
+            const bookImg = document.querySelector(".book-img");
+            bookImg.src = `http://127.0.0.1:8000/image/book/${responseData.bookImage.saveName}`;
+        }
     }
 
     loadCategories() {
