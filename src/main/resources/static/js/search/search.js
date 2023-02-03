@@ -1,4 +1,6 @@
 window.onload = () => {
+    SearchService.getInstance().loadCategories();
+
     ComponentEvent.getInstance().addClickEventCategoryCheckboxs();
 }
 
@@ -18,7 +20,25 @@ class SearchApi {
         return this.#instance;
     }
 
+    getCategories() {
+        let returnData = null;
 
+        $.ajax({
+            async: false,
+            type: "get",
+            url: "http://127.0.0.1:8000/api/admin/categories",
+            dataType: "json",
+            success: response => {
+                console.log(response);
+                returnData = response.data;
+            },
+            error: error => {
+                console.log(error);
+            }
+        });
+
+        return returnData;
+    }
 }
 
 class SearchService {
@@ -30,7 +50,20 @@ class SearchService {
         return this.#instance;
     }
 
+    loadCategories() {
+        const categoryList = document.querySelector(".category-list");
+        categoryList.innerHTML = ``;
 
+        const responseData = SearchApi.getInstance().getCategories();
+        responseData.forEach(categoryObj => {
+            categoryList.innerHTML += `
+                <div class="category-item">
+                    <input type="checkbox" class="category-checkbox" id="${categoryObj.category}" value="${categoryObj.category}">
+                    <label for="${categoryObj.category}">${categoryObj.category}</label>
+                </div>
+            `;
+        });
+    }
 }
 
 class ComponentEvent {
@@ -50,7 +83,8 @@ class ComponentEvent {
                 if(checkbox.checked) {
                     searchObj.categories.push(checkbox.value);
                 }else {
-                    searchObj.categories.pop(searchObj.categories.indexOf(checkbox.value));
+                    const index = searchObj.categories.indexOf(checkbox.value);
+                    searchObj.categories.splice(index, 1);
                 }
                 console.log(searchObj.categories);
             }
