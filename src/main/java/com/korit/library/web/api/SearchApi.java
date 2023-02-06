@@ -1,5 +1,6 @@
 package com.korit.library.web.api;
 
+import com.korit.library.aop.annotation.ParamsAspect;
 import com.korit.library.service.SearchService;
 import com.korit.library.web.dto.CMRespDto;
 import com.korit.library.web.dto.SearchBookReqDto;
@@ -26,6 +27,7 @@ public class SearchApi {
                         searchService.getSearchBooks(searchBookReqDto)));
     }
 
+    @ParamsAspect
     @GetMapping("/search/totalcount")
     public ResponseEntity<CMRespDto<Integer>> getSearchBookTotalCount(SearchBookReqDto searchBookReqDto) {
         return ResponseEntity.ok()

@@ -32,18 +32,18 @@
             parameterType="com.korit.library.web.dto.SearchBookReqDto"
             resultType="com.korit.library.entity.SearchBook">
         select
-            bm.book_id,
-            bm.book_code,
-            bm.book_name,
+            bm.book_id as bookId,
+            bm.book_code as bookCode,
+            bm.book_name as bookName,
             bm.author,
             bm.publisher,
-            bm.publication_date,
+            bm.publication_date as publicationDate,
             bm.category,
-            bi.save_name,
-            rd.rental_dtl_id,
-            rd.return_date,
-            rm.user_id,
-            lc.like_count
+            bi.save_name as saveName,
+            rd.rental_dtl_id as rentalDtlId,
+            rd.return_date as returnDate,
+            rm.user_id as userId,
+            lc.like_count as likeCount
         from
             book_mst bm
             left outer join book_image bi
@@ -63,10 +63,10 @@
                                 book_id) lc on(lc.book_id = bm.book_id)
         where
         1 = 1
-        <if test="searchValue != null">
-            (book_name like concat('%', #{searchValue} ,'%')
-            or	author like concat('%', #{searchValue} ,'%')
-            or	publisher like concat('%', #{searchValue} ,'%'))
+        <if test="searchValue != null and searchValue != ''">
+            (bm.book_name like concat('%', #{searchValue} ,'%')
+            or	bm.author like concat('%', #{searchValue} ,'%')
+            or	bm.publisher like concat('%', #{searchValue} ,'%'))
         </if>
         <if test='categories != null'>
             and	bm.category in
@@ -75,7 +75,7 @@
             </foreach>
         </if>
 
-        limit (#{page} - 1) * #{count}, #{count};
+        limit #{index}, #{count};
     </select>
 
 </mapper>
