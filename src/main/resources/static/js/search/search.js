@@ -1,4 +1,5 @@
 window.onload = () => {
+    SearchApi.getInstance().test();
     SearchService.getInstance().loadCategories();
 
     ComponentEvent.getInstance().addClickEventCategoryCheckboxs();
@@ -38,6 +39,22 @@ class SearchApi {
         });
 
         return returnData;
+    }
+
+    test() {
+        $.ajax({
+            async: false,
+            type: "get",
+            url: "http://127.0.0.1:8000/api/search/totalcount",
+            data: searchObj,
+            dataType: "json",
+            success: response => {
+                console.log(response);
+            },
+            error: error => {
+                console.log(error);
+            }
+        })
     }
 }
 
