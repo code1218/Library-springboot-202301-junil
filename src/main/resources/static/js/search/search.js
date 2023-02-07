@@ -1,4 +1,6 @@
 window.onload = () => {
+    HeaderService.getInstance().loadHeader();
+
     SearchService.getInstance().clearBookList();
     SearchService.getInstance().loadSearchBooks();
     SearchService.getInstance().loadCategories();
