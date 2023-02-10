@@ -24,7 +24,6 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
     private Map<String, Object> response;
 
 
-
     // 권한을 리스트로 관리하는 부분
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -93,11 +92,11 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
     @Override
     public String getName() {
-        return null;
+        return user.getName();
     }
 
     @Override
     public Map<String, Object> getAttributes() {
-        return null;
+        return response;
     }
 }
